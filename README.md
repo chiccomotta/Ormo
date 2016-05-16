@@ -71,6 +71,9 @@ using (Ormo Ormo = new Ormo(new OrmoCache()))
     persona = Ormo.Query<Person>(user.UserId);
 }
 ```
+By default Ormo retrieve all related entities defined in the class. For example in class Person the property
+Prodotti is annotated with RelatedEntityMapper attribute and so all related entities of type Product are loaded 
+when the instace of person is retrived.
 
 Use ```insert``` to insert a entity in a table:
 
