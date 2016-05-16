@@ -24,16 +24,16 @@ Decorate your model class:
 ```
 using System;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
 using CM.Ormo;
-
 
 namespace ApiJS.Models
 {
-    [TableMapper("UTENTI")]         // table name
+    // table name
+    [TableMapper("UTENTI")]         
     public class Person
     {
-        [ColumnMapper("ID", true)]          // column name, isPrimaryKey
+        // column name, isPrimaryKey
+        [ColumnMapper("ID", true)]          
         public int ID { get; set; }
 
         [ColumnMapper("Nome")]
@@ -54,7 +54,8 @@ namespace ApiJS.Models
         [ColumnMapper("data_inserimento")]
         public DateTime data_inserimento { get; set; }
 
-        [RelatedEntityMapper("PRODUCTS", "UserId")]     // related table, foreign key (use List<T> for collections                                                                    // of related entities)
+        // related table, foreign key (use List<T> for collections of related entities)
+        [RelatedEntityMapper("PRODUCTS", "UserId")]     
         public List<Product> Prodotti { get; set; } 
     }
 }
