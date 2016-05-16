@@ -3,7 +3,7 @@ simple and minimalist SQLite ORM.
 
 # How to use
 
-1. add Ormo files in your project (Ormo.cs, ColumnMapper.cs, TableMapper.cs and OrmoCache.cs)
+1. add Ormo files in a folder named Ormo in your project
 2. add SQLite assembly to your project (of course)
 3. add reference to System.Runtime.Caching.dll assembly (for cache)
 4. in Ormo class set connection string to your SQLite DB
@@ -23,15 +23,17 @@ Decorate your model class:
 
 ```
 using System;
+using System.Collections.Generic;
+using System.Net.Http.Headers;
 using CM.Ormo;
 
 
 namespace ApiJS.Models
 {
-    [TableMapper("UTENTI")]     // Table name 
+    [TableMapper("UTENTI")]         // table name
     public class Person
     {
-        [ColumnMapper("ID", true)]        // ID --> column name, true/false --> IsPrimaryKey
+        [ColumnMapper("ID", true)]          // column name, isPrimaryKey
         public int ID { get; set; }
 
         [ColumnMapper("Nome")]
@@ -51,6 +53,9 @@ namespace ApiJS.Models
 
         [ColumnMapper("data_inserimento")]
         public DateTime data_inserimento { get; set; }
+
+        [RelatedEntityMapper("PRODUCTS", "UserId")]     // related table, foreign key (use List<T> for collections                                                                    // of related entities)
+        public List<Product> Prodotti { get; set; } 
     }
 }
 ```
