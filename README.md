@@ -65,9 +65,8 @@ then use Ormo to retrieve 1 entity:
 
 ```
 Person persona;
-
-// Retrieve entity by ID
-using (Ormo Ormo = new Ormo())
+// use Ormo (inject cache provider in the constructor)
+using (Ormo Ormo = new Ormo(new OrmoCache()))
 {
     persona = Ormo.Query<Person>(user.UserId);
 }
