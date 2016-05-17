@@ -3,11 +3,11 @@ simple and minimalist SQLite ORM.
 
 # How to use
 
-1. add Ormo files in a folder named Ormo in your project
+1. add **Ormo files** in a folder named Ormo in your project
 2. add SQLite assembly to your project (of course)
 3. add reference to System.Runtime.Caching.dll assembly (for cache)
 4. in Ormo class set connection string to your SQLite DB
-3. create your model classes and decorate with Ormo Attributes (ColumnMapper and TableMapper) 
+3. create your model classes and decorate with Ormo Attributes (**ColumnMapper** and **TableMapper**) 
 4. use Ormo methods to query your SQLite database.
 
 
@@ -61,7 +61,7 @@ namespace ApiJS.Models
 }
 ```
 
-then use Ormo to retrieve 1 entity:
+then use Ormo method **Query<T>(ID)** to retrieve 1 entity:
 
 ```
 Person persona;
