@@ -61,7 +61,7 @@ namespace ApiJS.Models
 }
 ```
 
-then use Ormo method **Query<T>(ID)** to retrieve 1 entity:
+then use Ormo method **Query** to retrieve 1 entity:
 
 ```
 Person persona;
