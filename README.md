@@ -26,14 +26,13 @@ using System;
 using System.Collections.Generic;
 using CM.Ormo;
 
+
 namespace ApiJS.Models
 {
-    // table name
-    [TableMapper("UTENTI")]         
+    [TableMapper("UTENTI")]
     public class Person
     {
-        // column name, isPrimaryKey
-        [ColumnMapper("ID", true)]          
+        [ColumnMapper("ID", true)]        
         public int ID { get; set; }
 
         [ColumnMapper("Nome")]
@@ -54,9 +53,11 @@ namespace ApiJS.Models
         [ColumnMapper("data_inserimento")]
         public DateTime data_inserimento { get; set; }
 
-        // related table, foreign key (use List<T> for collections of related entities)
-        [RelatedEntityMapper("PRODUCTS", "UserId")]     
-        public List<Product> Prodotti { get; set; } 
+        [RelatedEntityMapper("PRODUCTS", "UserId")]
+        public List<Product> Prodotti { get; set; }
+
+        [RelatedEntityMapper("CARS", "UserId")]
+        public List<Car> Cars { get; set; }
     }
 }
 ```
