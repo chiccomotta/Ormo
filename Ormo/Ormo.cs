@@ -185,7 +185,7 @@ namespace CM.Ormo
 
             // if no records, return empty List<T>
             if (dt == null)
-                return new List<T>();
+                return results;
 
             foreach (DataRow row in dt.Rows)
             {
@@ -289,7 +289,7 @@ namespace CM.Ormo
 
                 // ritorno il last row id
                 command.CommandText = "SELECT last_insert_rowid()";
-                var rowId = (Int64)command.ExecuteScalar(CommandBehavior.CloseConnection);
+                var rowId = (Int64)command.ExecuteScalar(CommandBehavior.Default);
 
                 // cast a int 
                 return Convert.ToInt32(rowId);                
