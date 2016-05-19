@@ -119,3 +119,7 @@ using (Ormo Ormo = new Ormo())
     var result = Ormo.Update<Person>(persona);
 }
 ```
+
+## TODO List:
+1. Generating sql script from class entity for tables creation
+2. Fix related entities cached issue 
