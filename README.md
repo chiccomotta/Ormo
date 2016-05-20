@@ -122,3 +122,4 @@ using (Ormo Ormo = new Ormo(new OrmoCache()))
 ## TODO List:
 1. Generating sql script from class entities for tables creation
 2. Fix related entities cached issue (see ```QueryMany``` method in Ormo.cs)
+3. If cache is not injected use OrmoCache by default 
