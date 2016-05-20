@@ -4,12 +4,11 @@ simple and minimalist SQLite ORM.
 # How to use
 
 1. add **Ormo files** in a folder named Ormo in your project
-2. add SQLite assembly to your project (of course)
-3. add reference to System.Runtime.Caching.dll assembly (for cache)
-4. in Ormo class set connection string to your SQLite DB
-3. create your model classes and decorate with Ormo Attributes (**ColumnMapper** and **TableMapper**) 
+2. add a reference to **SQLite assembly** to your project (of course)
+3. add a reference to **System.Runtime.Caching.dll** assembly (for cache)
+4. in Ormo class set **connection string** to your SQLite DB
+3. create your model classes and decorate with Ormo Attributes (**ColumnMapper**, **TableMapper** and **RelatedEntityMapper**) 
 4. use Ormo methods to query your SQLite database.
-
 
 
 Set connection string in Ormo class (Ormo.cs)
@@ -123,3 +122,4 @@ using (Ormo Ormo = new Ormo())
 ## TODO List:
 1. Generating sql script from class entities for tables creation
 2. Fix related entities cached issue (see ```QueryMany``` method in Ormo.cs)
+3. Write Unit test
