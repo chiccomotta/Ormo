@@ -31,14 +31,10 @@ namespace CM.Ormo
         private IOrmoCache ormoCache;
 
         // Constructor
-        public Ormo(IOrmoCache cacheProvider)
-        {
-            // check cacheProvider
-            if (cacheProvider == null)
-                throw new Exception("Cache provider non inizializzato. Fornire un oggetto cacheProvider che implementa l'interfaccia IOrmoCache");
-
+        public Ormo(IOrmoCache cacheProvider = null)
+        {         
             // OrmoCache injected by dependency injection (Ormocache implements IOrmoCache interface)
-            ormoCache = cacheProvider;
+            ormoCache = (cacheProvider != null) ? cacheProvider : new OrmoCache();
 
             // hosted in IIS
             string AppData = HttpContext.Current.Server.MapPath("~/App_Data");
@@ -137,10 +133,7 @@ namespace CM.Ormo
                     // set list<T> of related entities
                     SetValue(entity, prop.Name, relatedEntities, relatedEntities.GetType());
                 }
-            }
-            
-            // add or update entity in the cache
-            ormoCache.Set<T>(entity);
+            }         
 
             // return entity
             return entity;
@@ -548,7 +541,113 @@ namespace CM.Ormo
         }
 
 
+        public bool GenerateTable<T>() where T: class, new()
+        {
+            // Type della classe
+            Type t = typeof(T);
 
+            // leggo l'attributo TableMapper
+            var tableMapperAttribute = t.GetCustomAttributes(typeof(TableMapper), false).FirstOrDefault() as TableMapper;
+
+            if (tableMapperAttribute == null)
+                throw new Exception("Attributo TableMapper non trovato sulla classe.");
+
+            List<string> columns = new List<string>();
+            string columnNamePK = "";
+
+            // prendo tutte le properties della classe
+            PropertyInfo[] props = t.GetProperties();
+
+            // per ogni proprietà prendo il nome della colonna della tabella
+            foreach (PropertyInfo prop in props)
+            {
+                // se la proprietà ha il custom attribute ColumnMapper leggo il nome della colonna
+                var attr = (ColumnMapper)Attribute.GetCustomAttribute(prop, typeof(ColumnMapper));
+                
+                // se la proprietà ha il custom attribute RelatedEntityMapper leggo il nome della colonna
+                //var attrRelated = (RelatedEntityMapper)Attribute.GetCustomAttribute(prop, typeof(RelatedEntityMapper));
+                
+                if (attr != null && attr is ColumnMapper)
+                {
+                    // Convert CLR Type to SQLite data type
+                    string SQLiteDataType = ToSQLiteType(prop.GetMethod.ReturnParameter.ParameterType);
+
+                    // se primary key (è sempre INTEGER)
+                    if (attr.IsPrimaryKey())
+                    {
+                        // leggo la colonna per la mappatura della tabella               
+                        columnNamePK = attr.GetColumnName();
+                    }
+                    else
+                    {
+                        columns.Add('"' + attr.GetColumnName() + '"' + " " + SQLiteDataType);
+                    }
+                }
+            }
+            
+            string sql = string.Format("CREATE TABLE \"{0}\" (\"{1}\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, {2});", 
+                tableMapperAttribute.GetTableName(), columnNamePK, string.Join(",", columns));
+            
+            Debug.WriteLine(sql);
+
+            // Create table
+            try
+            {                
+                using (SQLiteCommand command = new SQLiteCommand(SQLiteConnection))
+                {
+                    command.CommandText = sql;
+                    command.ExecuteNonQuery();
+                }
+
+                return true;
+            }
+            catch (Exception Ex)
+            {
+                return false;
+            }
+        }
+
+
+        // Convert CLR Data types to Sqlite data type
+        private string ToSQLiteType(Type CLRType)
+        {
+            switch (CLRType.ToString())
+            {
+                case "System.Int16":
+                case "System.Int32":
+                case "System.Int64":
+                case "System.Byte":
+                case "System.SByte":
+                case "System.UInt16":
+                case "System.UInt32":
+                case "System.UInt64":
+                    return "INTEGER";
+
+                case "System.Decimal":
+                case "System.Double":
+                    return "DOUBLE";
+
+                case "System.Single":
+                    return "FLOAT";
+
+                case "System.String":
+                    return "TEXT";
+
+                case "System.Char":
+                    return "CHAR";
+
+                case "System.DateTime":
+                    return "DATETIME";
+
+                case "System.Boolean":
+                    return "BOOL";
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(CLRType));
+            }
+        }
+
+        
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 

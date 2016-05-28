@@ -51,6 +51,14 @@ namespace CM.Ormo
             // Oggetto MemoryCache
             MemoryCache memoryCache = MemoryCache.Default;
 
+            // Add only entities without related entities to cache 
+            var attributes = from p in instance.GetType().GetProperties()
+                             let attr = p.GetCustomAttribute(typeof(RelatedEntityMapper), false)
+                             select attr;
+
+            if (attributes.Any(x => x != null))
+                return;
+
             // aggiungo l'oggetto (il metodo set aggiunge un oggetto se non esiste la chiave oppure l'aggiorna se la chiave c'è già)
             memoryCache.Set(
                 getCacheItemKey<T>(instance),
