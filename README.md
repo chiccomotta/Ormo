@@ -66,7 +66,7 @@ then use Ormo method ```Query<T>(id)``` to retrieve 1 entity:
 ```
 Person persona;
 // use Ormo (inject cache provider in the constructor)
-using (Ormo Ormo = new Ormo(new OrmoCache()))
+using (Ormo Ormo = new Ormo())
 {
     persona = Ormo.Query<Person>(user.UserId);
 }
@@ -87,7 +87,7 @@ persona.Citta = user.Citta;
 persona.data_inserimento = DateTime.Now;
 
 // Ormo
-using (Ormo Ormo = new Ormo(new OrmoCache()))
+using (Ormo Ormo = new Ormo())
 {
     var id = Ormo.Insert<Person>(persona);
 }
@@ -102,7 +102,7 @@ string sql = "SELECT * FROM UTENTI WHERE ID > 0";
 // all users
 IEnumerable<Person> persone;
 
-using (Ormo Ormo = new Ormo(new OrmoCache()))
+using (Ormo Ormo = new Ormo())
 {
     persone = Ormo.QueryMany<Person>(sql);                
 }
@@ -111,7 +111,7 @@ using (Ormo Ormo = new Ormo(new OrmoCache()))
 Use ```Update``` to update entity:
 
 ```
-using (Ormo Ormo = new Ormo(new OrmoCache()))
+using (Ormo Ormo = new Ormo())
 {
     Person persona = Ormo.Query<Person>(user.UserId);
     persona.Indirizzo = "TEST";
@@ -120,6 +120,4 @@ using (Ormo Ormo = new Ormo(new OrmoCache()))
 ```
 
 ## TODO List:
-1. Generating sql script from class entities for tables creation
-2. Fix related entities cached issue (see ```QueryMany``` method in Ormo.cs)
-3. If cache is not injected use OrmoCache by default 
+1. Fix related entities cached issue (see ```QueryMany``` method in Ormo.cs)
